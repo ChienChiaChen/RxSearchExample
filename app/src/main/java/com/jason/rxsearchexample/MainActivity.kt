@@ -6,8 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,14 +39,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getResultsBasedOnQuery(searchView: SearchView) {
+        val publishSubject = PublishSubject.create<String>()
+        val compositeDisposable = CompositeDisposable()
+
+        compositeDisposable.add(publishSubject
+            .filter { return@filter it.isNotEmpty() }
+            .debounce(600, TimeUnit.MILLISECONDS)
+            .switchMap { string -> return@switchMap Observable.just(string) }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show() }
+        )
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                Log.e("Jason", "MainActivity.onQueryTextSubmit (line 30): $query")
+                publishSubject.onNext(query)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                Log.e("Jason", "MainActivity.onQueryTextSubmit (line 35): $newText")
+                publishSubject.onNext(newText)
                 return true
             }
         })
