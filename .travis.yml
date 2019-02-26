@@ -1,0 +1,29 @@
+language: android
+jdk: oraclejdk8
+
+android:
+  components:
+  - tools
+  - build-tools-28.0.3
+  - android-28
+  - extra-google-m2repository
+  - extra-android-m2repository
+  - extra-android-support
+
+before_install:
+- chmod +x gradlew
+- export JAVA8_HOME=/usr/lib/jvm/java-8-oracle
+- export JAVA_HOME=$JAVA8_HOME
+
+script:
+  ./gradlew assembledebug
+
+deploy:
+  provider: releases
+  api_key:
+    secure: $GITHUB_API_KEY
+  file_glob: true
+  file: app/build/outputs/apk/*/*.apk
+  skip_cleanup: true
+  on:
+    tags: true
