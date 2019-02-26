@@ -33,9 +33,10 @@ class MainActivity : AppCompatActivity() {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
             searchView.maxWidth = Int.MAX_VALUE
             searchView.queryHint = "Input..."
-            getResultsBasedOnQuery(searchView)
+//            getResultsBasedOnQuery(searchView)
         }
-        return super.onCreateOptionsMenu(menu)
+//        return super.onCreateOptionsMenu(menu)
+        return true
     }
 
     private fun getResultsBasedOnQuery(searchView: SearchView) {
