@@ -16,5 +16,27 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark"
             android:layout_alignParentTop="true"/>
 
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputAccountLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/toolbar"
+            android:layout_margin="30dp">
+
+        <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="AppCompatEditText"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/inputAccountLayout"
+            android:layout_margin="30dp"
+            android:hint="TextInputEditText"/>
 
 </RelativeLayout>
